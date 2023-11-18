@@ -3,6 +3,10 @@ import Cards from './components/Cards.jsx';
 import Nav from './components/Nav.jsx';
 import { useState } from 'react';
 import axios from "axios"
+import {Routes, Route, useNavigate} from 'react-router-dom';
+import About from './components/About.jsx';
+import Detail from './components/Detail.jsx';
+import Nonresults from './components/Nonresults.jsx';
 
 const URL = "https://rym2.up.railway.app/api/character/";
 const API_KEY = "henrystaff"
@@ -10,6 +14,9 @@ const API_KEY = "henrystaff"
 function App() {
 
    const [characters, setCharacters] = useState([]);
+
+   const navigate = useNavigate();
+
    function onSearch(id) {
       const characterId = characters.filter(
          char => char.id === Number(id)
@@ -26,6 +33,7 @@ function App() {
             }
          }
       );
+      navigate("/home");
    }
    
    const onClose = id => {
@@ -51,7 +59,22 @@ function App() {
    return (
       <div className='App'>
          <Nav onSearch={onSearch} />
-         <Cards characters={characters} onClose={onClose} />
+         <Routes>
+            <Route
+               path='/home'
+               element={<Cards characters={characters} onClose={onClose} />}
+            />
+            <Route
+               path='/about'
+               element={<About />}
+            />
+            <Route
+               path='/detail/:id'
+               element={<Detail />}
+            />
+            <Route path='*' element={<Nonresults/>} ></Route>
+         </Routes>
+         
       </div>
    );
 }

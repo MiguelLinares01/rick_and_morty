@@ -1,12 +1,13 @@
 import './App.css';
 import Cards from './components/Cards.jsx';
 import Nav from './components/Nav.jsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from "axios"
-import {Routes, Route, useNavigate} from 'react-router-dom';
+import {Routes, Route, useNavigate, useLocation} from 'react-router-dom';
 import About from './components/About.jsx';
 import Detail from './components/Detail.jsx';
 import Nonresults from './components/Nonresults.jsx';
+import Form from './components/Form.jsx';
 
 const URL = "https://rym2.up.railway.app/api/character/";
 const API_KEY = "henrystaff"
@@ -15,7 +16,8 @@ function App() {
 
    const [characters, setCharacters] = useState([]);
 
-   const navigate = useNavigate();
+   const navigate = useNavigate()
+   const location = useLocation()
 
    function onSearch(id) {
       const characterId = characters.filter(
@@ -40,6 +42,29 @@ function App() {
       setCharacters(characters.filter(char => char.id !== Number(id)))
    }
 
+   const [access, setAccess] = useState(false);
+   const EMAIL = 'example@hotmail.com';
+   const PASSWORD = 'lapa12';
+
+   function login(userData) {
+      if (userData.password === PASSWORD && userData.email === EMAIL) {
+         setAccess(true);
+         navigate('/home');
+      }
+      else{
+         alert('Credenciales incorrectas');
+      }
+   }
+
+   function logout(){
+      setAccess(false);
+   }
+
+   useEffect(() => {
+      //!Logueo automático !access && navigate('/home');
+      !access && navigate('/');
+   }, [access]);
+
    const example = {
       id: 1,
       name: 'Rick Sanchez',
@@ -52,14 +77,17 @@ function App() {
       },
       image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
    };
-   
-
-   
 
    return (
       <div className='App'>
-         <Nav onSearch={onSearch} />
+         {
+            location.pathname !== "/" && <Nav onSearch={onSearch} logout={logout} />
+         }
          <Routes>
+            <Route
+               path='/'
+               element={<Form login={login}/>}
+            />
             <Route
                path='/home'
                element={<Cards characters={characters} onClose={onClose} />}

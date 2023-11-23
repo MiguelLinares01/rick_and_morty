@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import banner from './assets/rick_and_morty_banner.png'
-import validation from "./Validation";
+import banner from '../assets/rick_and_morty_banner.png'
+import validation from "../validation";
 
 export default function Form(props){
 

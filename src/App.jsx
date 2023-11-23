@@ -1,13 +1,16 @@
 import './App.css';
-import Cards from './components/Cards.jsx';
-import Nav from './components/Nav.jsx';
+import Cards from './components/cards/Cards.jsx';
+import Nav from './components/nav/Nav.jsx';
 import { useEffect, useState } from 'react';
 import axios from "axios"
 import {Routes, Route, useNavigate, useLocation} from 'react-router-dom';
-import About from './components/About.jsx';
-import Detail from './components/Detail.jsx';
-import Nonresults from './components/Nonresults.jsx';
-import Form from './components/Form.jsx';
+import About from './components/about/About.jsx';
+import Detail from './components/detail/Detail.jsx';
+import Nonresults from './components/nonresults/Nonresults.jsx';
+import Form from './components/form/Form.jsx';
+import Favorites from './components/favorites/Favorites.jsx';
+import { useDispatch } from 'react-redux';
+import { removeFav } from './components/redux/actions.js';
 
 const URL = "https://rym2.up.railway.app/api/character/";
 const API_KEY = "henrystaff"
@@ -38,8 +41,11 @@ function App() {
       navigate("/home");
    }
    
-   const onClose = id => {
-      setCharacters(characters.filter(char => char.id !== Number(id)))
+   const dispatch = useDispatch();
+
+   const onClose = (id) => {
+      setCharacters(characters.filter(char => char.id !== Number(id)));    
+      dispatch(removeFav(id));
    }
 
    const [access, setAccess] = useState(false);
@@ -99,6 +105,10 @@ function App() {
             <Route
                path='/detail/:id'
                element={<Detail />}
+            />
+            <Route
+               path='/favorites'
+               element={<Favorites onClose={onClose} />}
             />
             <Route path='*' element={<Nonresults/>} ></Route>
          </Routes>

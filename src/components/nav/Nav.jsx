@@ -1,4 +1,4 @@
-import SearchBar from "./SearchBar";
+import SearchBar from "../searchbar/SearchBar";
 import {NavLink} from 'react-router-dom';
 export default function Nav(props) {
     return (
@@ -9,9 +9,10 @@ export default function Nav(props) {
             <NavLink to='/about'>
                <button>About</button>
             </NavLink>
-            <NavLink to='/logout'>
-               <button onClick={props.logout}>Log out</button>
+            <NavLink to='/favorites'>
+               <button>Favorites</button>
             </NavLink>
+               <button onClick={props.logout}>Log out</button>
           <SearchBar onSearch={props.onSearch}/>
        </div>
     );

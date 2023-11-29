@@ -1,5 +1,5 @@
-import {regexEmail} from './constants.js';
-import {regexPassword} from './constants.js';
+import {regexEmail} from '../constants.js';
+import {regexPassword} from '../constants.js';
 
 export default function validation(input){
     const errors = {};

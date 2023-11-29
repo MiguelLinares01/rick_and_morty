@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import banner from '../assets/rick_and_morty_banner.png'
-import validation from "../validation";
+import validation from "./validation";
 
 export default function Form(props){
 
@@ -22,7 +22,6 @@ export default function Form(props){
         event.preventDefault();
         props.login(userData);
     }
-
     return(
         <div>
         <form onSubmit={handleSubmit}>

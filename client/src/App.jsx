@@ -10,7 +10,7 @@ import Nonresults from './components/nonresults/Nonresults.jsx';
 import Form from './components/form/Form.jsx';
 import Favorites from './components/favorites/Favorites.jsx';
 import { useDispatch } from 'react-redux';
-import { removeFav } from './components/redux/actions.js';
+import { removeFav } from './redux/actions.js';
 
 const URL = "https://rym2.up.railway.app/api/character/";
 const API_KEY = "henrystaff"

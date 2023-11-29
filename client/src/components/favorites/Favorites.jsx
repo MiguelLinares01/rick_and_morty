@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Card from '../card/Card';
-import { filterCards, orderCards } from '../redux/actions';
+import { filterCards, orderCards } from '../../redux/actions';
 
 export default function Favorites({onClose}) {
    

@@ -21,29 +21,32 @@ function App() {
 
    const navigate = useNavigate()
    const location = useLocation()
+   const dispatch = useDispatch();
 
-   function onSearch(id) {
-      const characterId = characters.filter(
-         char => char.id === Number(id)
-      )
-      if(characterId.length){
-         return alert(`El personaje ${characterId[0].name} ya existe!`);
-      }
-      //axios(`${URL}${id}?key=${API_KEY}`)
-      axios(`http://localhost:3001/rickandmorty/character/${id}`)
-         .then(
-         ({ data }) => {
-            if (data.name) {
-               setCharacters((oldChars) => [...oldChars, data]);
-            } else {
-               window.alert('¡No hay personajes con este ID!');
-            }
+   async function onSearch(id) {
+
+      try {
+         const characterId = characters.filter(
+            char => char.id === Number(id)
+         )
+         if(characterId.length){
+            return alert(`El personaje ${characterId[0].name} ya existe!`);
          }
-      );
-      navigate("/home");
+         
+         const { data } = await axios(`http://localhost:3001/rickandmorty/character/${id}`);
+         if (data.name) {
+            setCharacters([...characters, data]);
+            navigate("/home");
+         } else {
+            alert('¡El ID deve de ser un número entre 1 y 826!');
+         }
+      } catch (error) {
+         alert('¡El ID deve de ser un número entre 1 y 826!');
+      }
+      
    }
    
-   const dispatch = useDispatch();
+   
 
    const onClose = (id) => {
       setCharacters(characters.filter(char => char.id !== Number(id)));    
@@ -64,19 +67,23 @@ function App() {
       }
    }*/
 
-   function login(userData) {
-      const { email, password } = userData;
-      const URL = 'http://localhost:3001/rickandmorty/login/';
-      axios(URL + `?email=${email}&password=${password}`).then(({ data }) => {
-         const { access } = data;
-         if(access) {
-            setAccess(data);
-            access && navigate('/home');
+   async function login(userData) {
+      try {
+         const { email, password } = userData;   
+         const URL = 'http://localhost:3001/rickandmorty/login/';
+         const { data } = await axios (URL + `?email=${email}&password=${password}`);
+
+         if(data.access){
+            setAccess(data.access);
+            navigate('/home');
          }
          else{
-            alert("Credenciales incorrectas")
+            alert("Credenciales incorrectas");
          }
-      });
+
+      } catch (error) {
+         alert(error.message)
+      }
    }
 
    function logout(){
@@ -87,19 +94,6 @@ function App() {
       //!Logueo automático !access && navigate('/home');
       !access && navigate('/');
    }, [access]);
-
-   const example = {
-      id: 1,
-      name: 'Rick Sanchez',
-      status: 'Alive',
-      species: 'Human',
-      gender: 'Male',
-      origin: {
-         name: 'Earth (C-137)',
-         url: 'https://rickandmortyapi.com/api/location/1',
-      },
-      image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-   };
 
    return (
       <div className='App'>
